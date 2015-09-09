@@ -1,3 +1,5 @@
+import json
+
 from bottle import route, run, template, static_file, request
 from redis import Redis
 
@@ -25,7 +27,8 @@ def user_kill(user):
 @route('/scoreboard')
 def scoreboard():
     keys = redis.keys()
-    return {k:int(redis.get(k)) for k in keys}
+    l = [{"name":k, "score":int(redis.get(k))} for k in keys if k != "kills"]
+    return json.dumps(sorted(l, key=lambda x: x['score'], reverse=True))
 
 @route('/')
 def index():
@@ -34,5 +37,8 @@ def index():
 @route('/bower_components/<filepath:path>')
 def server_static(filepath):
     return static_file(filepath, root='bower_components')
+@route('/static/<filepath:path>')
+def server_static(filepath):
+    return static_file(filepath, root='static')
 
 run(host='0.0.0.0', port=5000, debug=True, reloader=True)

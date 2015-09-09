@@ -10,6 +10,8 @@
 <link rel="import" href="bower_components/paper-input/paper-input.html">
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="bower_components/ajax-form/ajax-form.html">
+<link rel="import" href="bower_components/iron-list/iron-list.html">
+<link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
 
 
 
@@ -62,6 +64,9 @@
     .pink {
       --paper-card-header-color: var(--paper-pink-500);
     }
+    iron-list{
+        height: 300px;
+    }
   </style>
 </head>
 <h1>Mosca Morta</h1>
@@ -82,6 +87,17 @@
     </paper-card>
     <paper-card heading="Leaderboard">
     <div class="card-content leaderboard">
+        <template is="dom-bind">
+        %A, B = '{{', '}}'
+          <iron-ajax url="/scoreboard" last-response="{{A}}data{{B}}" auto></iron-ajax>
+          <iron-list items="[[data]]" as="item">
+            <template>
+              <div>
+              <paper-item>[[item.name]]<paper-badge label="[[item.score]]"></paper-badge><paper-icon-button icon="add"></paper-icon-button></paper-item>
+              </div>
+            </template>
+          </iron-list>
+        </template>
         <paper-item>Lucy<paper-badge label="7"></paper-badge><paper-icon-button icon="add"></paper-icon-button></paper-item>
         <paper-item>Jack<paper-badge label="3"></paper-badge><paper-icon-button icon="add"></paper-icon-button></paper-item>
     </div>
