@@ -13,6 +13,7 @@
 <link rel="import" href="bower_components/iron-list/iron-list.html">
 <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
 
+<link rel="icon" href="/static/johnny-automatic-fly-256px.png">
 
 
 
@@ -67,8 +68,12 @@
     iron-list{
         height: 300px;
     }
+    paper-item{
+      line-height: 2em;
+    }
   </style>
 </head>
+<body>
 <h1>Mosca Morta</h1>
 <h2>Fly killing tracker and achievements board<h2>
 
@@ -93,18 +98,16 @@
           <iron-list items="[[data]]" as="item">
             <template>
               <div>
-              <paper-item>[[item.name]]<paper-badge label="[[item.score]]"></paper-badge><paper-icon-button icon="add"></paper-icon-button></paper-item>
+              <paper-item>[[item.name]]<paper-badge label="[[item.score]]"></paper-badge></paper-item>
               </div>
             </template>
           </iron-list>
         </template>
-        <paper-item>Lucy<paper-badge label="7"></paper-badge><paper-icon-button icon="add"></paper-icon-button></paper-item>
-        <paper-item>Jack<paper-badge label="3"></paper-badge><paper-icon-button icon="add"></paper-icon-button></paper-item>
     </div>
     </paper-card>
     <paper-card heading="Add your victories">
     <div class="card-content">
-    <form action="/kill" method="POST">
+    <form is="ajax-form" action="/kill" method="POST">
         <paper-input name="name" label="Name"></paper-input>
         <paper-button raised id="submitButton">I killed a fly</paper-button>
         <button type="submit">I killed a fly</button>
@@ -114,7 +117,9 @@
 </div>
 <script>
    document.getElementById('submitButton').addEventListener('click', function() {
-      document.forms[0].submit(); 
+      document.forms[0].submit();
+      document.getElementsByTagName("iron-ajax")[0].generateRequest()
    });
 </script>
+</body>
 </html>
