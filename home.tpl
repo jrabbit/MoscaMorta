@@ -14,7 +14,7 @@
 <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="icon" href="/static/johnny-automatic-fly-256px.png">
-
+<script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
 
 <style type="text/css">
@@ -31,15 +31,17 @@
     }
     #cards {
       @apply(--layout-vertical);
-/*      @apply(--layout-horizontal);
-*/      @apply(--center-justified);
+      @apply(--layout-horizontal);
+      @apply(--center-justified);
       max-width: 400px;
       margin-left: auto;
       margin-right: auto;
+      float: left;
     }
     paper-card {
       width: 100%;
       margin-bottom: 16px;
+      margin-right: 16px;
     }
     paper-badge {
       --paper-badge-margin-left: 20px;
@@ -87,7 +89,7 @@
 %A, B = '{{', '}}'
 <div id="cards">
     <template is="dom-bind">
-        <iron-ajax url="/total" last-response="{{A}}response{{B}}" handle-as="json" auto></iron-ajax>
+        <iron-ajax url="/total" last-response="{{A}}response{{B}}" handle-as="json" auto id="ajax-total"></iron-ajax>
         <paper-card heading="Grand Total" class="pink">
             <div class="card-content">
                 <span>[[response.total]]</span> dead flies
@@ -104,11 +106,11 @@
     <div class="card-content leaderboard">
         <template is="dom-bind">
         
-          <iron-ajax url="/scoreboard" last-response="{{A}}data{{B}}" auto></iron-ajax>
+          <iron-ajax url="/scoreboard" last-response="{{A}}data{{B}}" auto id='named-ajax'></iron-ajax>
           <iron-list items="[[data]]" as="item">
             <template>
               <div>
-              <paper-item>[[item.name]]<paper-badge label="[[item.score]]"></paper-badge></paper-item>
+              <paper-item><span>[[item.name]]</span><paper-badge label="[[item.score]]"></paper-badge></paper-item>
               </div>
             </template>
           </iron-list>
@@ -127,14 +129,19 @@
     </paper-card>
 </div>
 <script>
-   document.getElementById('submitButton').addEventListener('click', function() {
-      document.getElementById('namedform').submit();
-      document.getElementsByTagName("iron-ajax")[0].generateRequest()
-   });
-   // document.getElementById('submitButton2').addEventListener('click', function() {
-   //    document.getElementById('anon-form').submit();
-   //    document.getElementsByTagName("iron-ajax")[0].generateRequest()
-   // });
+    window.addEventListener('WebComponentsReady', function(e) {
+      // imports are loaded and elements have been registered
+        document.getElementById('submitButton').addEventListener('click', function() {
+            document.getElementById('namedform').submit();
+            document.getElementById('named-ajax').generateRequest();
+            document.getElementById('ajax-total').generateRequest();
+       });
+       document.getElementById('submitButton2').addEventListener('click', function() {
+          document.getElementById('anon-form').submit();
+          document.getElementById('ajax-total').generateRequest();
+       });
+    });
+
 </script>
 </body>
 </html>
