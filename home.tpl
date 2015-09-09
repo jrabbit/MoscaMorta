@@ -31,17 +31,15 @@
     }
     #cards {
       @apply(--layout-vertical);
-      @apply(--layout-horizontal);
-      @apply(--center-justified);
+/*      @apply(--layout-horizontal);
+*/      @apply(--center-justified);
       max-width: 400px;
       margin-left: auto;
       margin-right: auto;
-      float: left;
     }
     paper-card {
       width: 100%;
       margin-bottom: 16px;
-      margin-right: 16px;
     }
     paper-badge {
       --paper-badge-margin-left: 20px;
