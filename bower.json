@@ -1,0 +1,9 @@
+{
+  "name": "Mosca Morta",
+  "dependencies": {
+    "paper-badge": "PolymerElements/paper-badge#~1.0.3",
+    "paper-button": "PolymerElements/paper-button#~1.0.4",
+    "paper-card": "PolymerElements/paper-card#^1.0.0",
+    "paper-fab": "PolymerElements/paper-fab#^1.0.0"
+  }
+}

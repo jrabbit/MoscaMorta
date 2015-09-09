@@ -1,4 +1,4 @@
-from bottle import route, run, template
+from bottle import route, run, template, static_file
 from redis import Redis
 
 redis = Redis(host='redis', port=6379)
@@ -14,4 +14,9 @@ def kill():
 @route('/')
 def index():
     return template('home.tpl', deaths=redis.get('kills'))
+
+@route('/bower_components/<filepath:path>')
+def server_static(filepath):
+    return static_file(filepath, root='bower_components')
+
 run(host='0.0.0.0', port=5000, debug=True, reloader=True)
