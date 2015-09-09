@@ -25,10 +25,14 @@
 <style is="custom-style">
     body {
       background-color: var(--paper-grey-50);
+      background-image: url(/static/johnny-automatic-fly-256px.png);
+      background-position: right top;
+      background-repeat: no-repeat;
     }
     #cards {
       @apply(--layout-vertical);
-      @apply(--center-justified);
+/*      @apply(--layout-horizontal);
+*/      @apply(--center-justified);
       max-width: 400px;
       margin-left: auto;
       margin-right: auto;
@@ -38,8 +42,8 @@
       margin-bottom: 16px;
     }
     paper-badge {
-/*      --paper-badge-margin-left: 20px;
-*/    }
+      --paper-badge-margin-left: 20px;
+    }
     .leaderboard {
         @apply(--layout-vertical);
         @apply(--center-justified);
@@ -71,29 +75,35 @@
     paper-item{
       line-height: 2em;
     }
+    paper-badge{
+        float: right;
+    }
   </style>
 </head>
 <body>
 <h1>Mosca Morta</h1>
 <h2>Fly killing tracker and achievements board<h2>
 
+%A, B = '{{', '}}'
 <div id="cards">
-    <paper-card heading="Grand Total" class="pink">
-    <div class="card-content">
-    {{deaths}} dead flies
-    </div>
-    <div class="card-actions">
-        <paper-button>I killed a fly</paper-button>
-    </div>
-    <div class="card-actions">
-        <paper-button>I killed 5x</paper-button>
-        <paper-button>10x</paper-button>
-    </div>
-    </paper-card>
+    <template is="dom-bind">
+        <iron-ajax url="/total" last-response="{{A}}response{{B}}" handle-as="json" auto></iron-ajax>
+        <paper-card heading="Grand Total" class="pink">
+            <div class="card-content">
+                <span>[[response.total]]</span> dead flies
+            </div>
+            <div class="card-actions">
+                <form is="ajax-form" action="/kill" method="POST" id="anon-form">
+                <paper-button id="submitButton2">I killed a fly (anonymously)</paper-button>
+                </form>
+            </div>
+        </paper-card>
+    </template>
+
     <paper-card heading="Leaderboard">
     <div class="card-content leaderboard">
         <template is="dom-bind">
-        %A, B = '{{', '}}'
+        
           <iron-ajax url="/scoreboard" last-response="{{A}}data{{B}}" auto></iron-ajax>
           <iron-list items="[[data]]" as="item">
             <template>
@@ -107,19 +117,24 @@
     </paper-card>
     <paper-card heading="Add your victories">
     <div class="card-content">
-    <form is="ajax-form" action="/kill" method="POST">
+    <form is="ajax-form" action="/kill" method="POST" id="namedform">
         <paper-input name="name" label="Name"></paper-input>
+            </div>
+        <div class="card-actions">
         <paper-button raised id="submitButton">I killed a fly</paper-button>
-        <button type="submit">I killed a fly</button>
+        </div>
     </form>
-    </div>
     </paper-card>
 </div>
 <script>
    document.getElementById('submitButton').addEventListener('click', function() {
-      document.forms[0].submit();
+      document.getElementById('namedform').submit();
       document.getElementsByTagName("iron-ajax")[0].generateRequest()
    });
+   // document.getElementById('submitButton2').addEventListener('click', function() {
+   //    document.getElementById('anon-form').submit();
+   //    document.getElementsByTagName("iron-ajax")[0].generateRequest()
+   // });
 </script>
 </body>
 </html>

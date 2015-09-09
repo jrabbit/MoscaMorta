@@ -23,6 +23,9 @@ def user_kill(user):
     redis.incr(user)
     return template('<b>Flies killed: {{num_killed}}</b>!', num_killed=redis.get(user))
 
+@route('/total')
+def total():
+    return {"total": redis.get('kills')}
 
 @route('/scoreboard')
 def scoreboard():
