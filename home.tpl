@@ -6,6 +6,12 @@
 <link rel="import" href="bower_components/paper-card/paper-card.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 <link rel="import" href="bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/ajax-form/ajax-form.html">
+
+
 
 
 <style type="text/css">
@@ -31,17 +37,6 @@
     paper-badge {
 /*      --paper-badge-margin-left: 20px;
 */    }
-    .avatar {
-      display: inline-block;
-      height: 64px;
-      width: 64px;
-      border-radius: 50%;
-      background: var(--paper-pink-500);
-      color: white;
-      line-height: 64px;
-      font-size: 30px;
-      text-align: center;
-    }
     .leaderboard {
         @apply(--layout-vertical);
         @apply(--center-justified);
@@ -87,17 +82,23 @@
     </paper-card>
     <paper-card heading="Leaderboard">
     <div class="card-content leaderboard">
-        <paper-item>Lucy<paper-badge label="7"></paper-badge></paper-item>
-        <paper-item>Jack<paper-badge label="3"></paper-badge></paper-item>
+        <paper-item>Lucy<paper-badge label="7"></paper-badge><paper-icon-button icon="add"></paper-icon-button></paper-item>
+        <paper-item>Jack<paper-badge label="3"></paper-badge><paper-icon-button icon="add"></paper-icon-button></paper-item>
     </div>
     </paper-card>
-    <paper-card>
+    <paper-card heading="Add your victories">
     <div class="card-content">
-    <form action="/kill">
+    <form action="/kill" method="POST">
+        <paper-input name="name" label="Name"></paper-input>
+        <paper-button raised id="submitButton">I killed a fly</paper-button>
         <button type="submit">I killed a fly</button>
     </form>
     </div>
     </paper-card>
 </div>
-
+<script>
+   document.getElementById('submitButton').addEventListener('click', function() {
+      document.forms[0].submit(); 
+   });
+</script>
 </html>

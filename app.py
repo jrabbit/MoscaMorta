@@ -1,15 +1,31 @@
-from bottle import route, run, template, static_file
+from bottle import route, run, template, static_file, request
 from redis import Redis
 
 redis = Redis(host='redis', port=6379)
 
 
-@route('/kill')
+@route('/kill', method='POST')
 def kill():
     redis.incr('kills')
+    if request.forms.get("name"):
+        user = request.forms.get("name")
+        # print user
+        redis.incr(user)
+        return template('<b>Flies killed: {{num_killed}}</b>!', num_killed=redis.get(user))
+    else:
+        return template('<b>Flies killed: {{num_killed}}</b>!', num_killed=redis.get('kills'))
 
-    return template('<b>Flies killed: {{num_killed}}</b>!', num_killed=redis.get('kills'))
+@route('/kill/<user>')
+def user_kill(user):
+    redis.incr('kills')
+    redis.incr(user)
+    return template('<b>Flies killed: {{num_killed}}</b>!', num_killed=redis.get(user))
 
+
+@route('/scoreboard')
+def scoreboard():
+    keys = redis.keys()
+    return {k:int(redis.get(k)) for k in keys}
 
 @route('/')
 def index():
