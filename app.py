@@ -1,4 +1,5 @@
 import json
+import os
 
 from bottle import route, run, template, static_file, request
 from redis import Redis
@@ -44,4 +45,4 @@ def server_static(filepath):
 def server_static(filepath):
     return static_file(filepath, root='static')
 
-run(host='0.0.0.0', port=5000, debug=True, reloader=True)
+run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)), debug=True, reloader=True)
