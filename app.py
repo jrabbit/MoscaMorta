@@ -3,8 +3,12 @@ import os
 
 from bottle import route, run, template, static_file, request
 from redis import Redis
+import redis
 
-redis = Redis(host='redis', port=6379)
+if "REDIS_URL" in os.environ:
+    redis = redis.from_url(os.environ.get("REDIS_URL"))
+else:
+    redis = Redis(host='redis', port=6379)
 
 
 @route('/kill', method='POST')
